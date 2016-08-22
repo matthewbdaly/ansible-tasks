@@ -4,10 +4,16 @@
   become: True
 
 - name: Create new droplet
+  roles:
+    - create_droplet
 
 - name: Set up utilities
+  roles:
+    - utilities
 
 - name: Set up user
+  roles:
+    - users
 
 - name: Set up Postgres
   roles:
