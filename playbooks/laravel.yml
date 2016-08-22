@@ -1,7 +1,6 @@
 ---
 - name: Set up a standard Laravel install
   hosts: laravel
-  become: True
 
 - name: Create new droplet
   roles:
