@@ -2,15 +2,17 @@
 - name: Setup dotdeb repo
   apt_repository: repo='deb http://packages.dotdeb.org jessie all' state=present
 
-- name: dotdep source
+- name: Dotdeb source
   apt_repository: repo='deb-src http://packages.dotdeb.org jessie all' state=present
 
 - name: Install dotdeb keys
   get_url: url=https://www.dotdeb.org/dotdeb.gpg dest=~/dotdeb.gpg
 - apt_key: file=~/dotdeb.gpg
 
-- name: update system
+- name: Update system
   apt: upgrade=full update_cache=yes
+
+- name: Install dependencies
   apt: name={{ item }} state=present
   with_items:
    - nginx
@@ -41,5 +43,6 @@
 
 - name: restart php7.0-fpm.service
   service: name=php7.0-fpm.service state=restarted
+
 - name: restart nginx
   service: name=nginx state=restarted

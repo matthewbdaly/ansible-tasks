@@ -3,8 +3,18 @@
   hosts: laravel
   become: True
 
+- name: Set up Postgres
   roles:
     - postgres
+
+- name: Set up Nginx and PHP
+  roles:
     - nginx-php
+
+- name: Set up firewall
+  roles:
     - nginx_firewall
+
+- name: Set up Redis
+  roles:
     - redis
