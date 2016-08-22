@@ -1,0 +1,22 @@
+---
+- name: Install Utilities
+  apt: name={{ item }} state=present
+  with_items:
+  - sudo
+  - git
+  - screen
+  - byobu
+  - sqlite
+  - vim-nox
+  - wget
+  - curl
+  - libcurl3
+  - libcurl3-dev
+  - ntp
+  - debconf-utils
+
+- name: Configure time
+  shell: "{{ item }}"
+  with_items:
+    - echo "Europe/London" > /etc/timezone
+    - dpkg-reconfigure -f noninteractive tzdata
