@@ -3,6 +3,12 @@
   hosts: laravel
   become: True
 
+- name: Create new droplet
+
+- name: Set up utilities
+
+- name: Set up user
+
 - name: Set up Postgres
   roles:
     - postgres
