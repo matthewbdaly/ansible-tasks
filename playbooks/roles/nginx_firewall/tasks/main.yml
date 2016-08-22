@@ -1,0 +1,33 @@
+---
+- name: install firewall
+  apt: name={{ item }} state=present
+  with_items:
+  - fail2ban
+  - ufw
+
+- name: Copy over fail2ban configuration
+  template: src={{ item.src }}.j2 dest={{ item.path }} owner=root group=root mode=0644
+  with_items:
+    - { src: jail.local, path: /etc/fail2ban/jail.local }
+    - { src: ufw-ssh.conf, path: /etc/fail2ban/action.d/ufw-ssh.conf }
+    - { src: ufw-nginx.conf, path: /etc/fail2ban/action.d/ufw-nginx.conf }
+    - { src: nginx-badbots.conf, path: /etc/fail2ban/filter.d/nginx-badbots.conf }
+    - { src: nginx-botsearch.conf, path: /etc/fail2ban/filter.d/nginx-botsearch.conf }
+    - { src: nginx-http-auth.conf, path: /etc/fail2ban/filter.d/nginx-http-auth.conf }
+    - { src: nginx-nohome.conf, path: /etc/fail2ban/filter.d/nginx-nohome.conf }
+    - { src: nginx-noproxy.conf, path: /etc/fail2ban/filter.d/nginx-noproxy.conf }
+    - { src: nginx-noscript.conf, path: /etc/fail2ban/filter.d/nginx-noscript.conf}
+
+- name: Restart Fail2ban
+  service: name=fail2ban state=restarted
+
+- name: Set logging for ufw
+  ufw: logging=on
+- name: Set default policy
+  ufw: policy=deny
+- name: Allow port 22
+  ufw: rule=allow name=OpenSSH
+- name: Allow port 80
+  ufw: rule=allow port=80 proto=tcp
+- name: Enable ufw
+  ufw: state=enabled

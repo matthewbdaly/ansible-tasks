@@ -1,0 +1,6 @@
+[Definition]
+actionstart =
+actionstop =
+actioncheck =
+actionban = ufw insert 1 deny from <ip> to any port 80 && ufw insert 2 deny from <ip> to any port 443
+actionunban = ufw delete deny from <ip> to any port 80 && ufw delete deny from <ip> to any port 443
