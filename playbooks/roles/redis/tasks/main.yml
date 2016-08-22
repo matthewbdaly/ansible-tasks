@@ -1,0 +1,9 @@
+---
+- name: Set up a Redis server
+  apt: name={{ item }} state=present
+  with_items:
+  - redis-server
+
+- name: Reload Systemctl
+  command: systemctl daemon-reload
+- service: name=redis-server state=restarted
