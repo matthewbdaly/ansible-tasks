@@ -1,0 +1,7 @@
+---
+- name: Update system
+  hosts: allservers
+  become: True
+  tasks:
+    - name: update system
+      apt: upgrade=full update_cache=yes
