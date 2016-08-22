@@ -7,6 +7,10 @@
   roles:
     - create_droplet
 
+- name: Create domain
+  roles:
+    - create_domain
+
 - name: Set up utilities
   roles:
     - utilities

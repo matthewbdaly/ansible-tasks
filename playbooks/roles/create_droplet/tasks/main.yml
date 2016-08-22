@@ -1,0 +1,12 @@
+---
+- name: Create droplet
+  digital_ocean: >
+      state=present
+      command=droplet
+      name={{ domain }}
+      size_id=512mb
+      region_id=lon1
+      image_id=debian-8-x64
+      ssh_key_ids={{ [2957623] }}
+      unique_name=yes
+  register: new_droplet
