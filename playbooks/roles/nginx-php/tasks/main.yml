@@ -1,0 +1,45 @@
+---
+- name: Setup dotdeb repo
+  apt_repository: repo='deb http://packages.dotdeb.org jessie all' state=present
+
+- name: dotdep source
+  apt_repository: repo='deb-src http://packages.dotdeb.org jessie all' state=present
+
+- name: Install dotdeb keys
+  get_url: url=https://www.dotdeb.org/dotdeb.gpg dest=~/dotdeb.gpg
+- apt_key: file=~/dotdeb.gpg
+
+- name: update system
+  apt: upgrade=full update_cache=yes
+  apt: name={{ item }} state=present
+  with_items:
+   - nginx
+   - php7.0-fpm
+   - php7.0-cli
+   - php7.0-mcrypt
+   - php7.0-pgsql
+   - php7.0-sqlite3
+   - php7.0-opcache
+   - php7.0-curl
+   - php7.0-mbstring
+   - php7.0-dom
+   - php7.0-xml
+   - php7.0-zip
+
+- name: Activate FPM
+  replace: dest=/etc/php/7.0/fpm/php.ini regexp=';cgi.fix_pathinfo=1' replace='cgi.fix_pathinfo=0'
+- name: Set POST max size
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini regexp='^post_max_size =' line='post_max_size = 50M'
+- name: Set upload max filesize
+  lineinfile: dest=/etc/php/7.0/fpm/php.ini regexp='^upload_max_filesize =' line='upload_max_filesize = 50M'
+- command: sudo phpenmod mcrypt
+- name: Copy over Nginx configuration
+  copy: src=nginx-php.conf dest=/etc/nginx/sites-available/default owner=root group=root mode=0644
+
+- name: Reload Systemctl
+  command: systemctl daemon-reload
+
+- name: restart php7.0-fpm.service
+  service: name=php7.0-fpm.service state=restarted
+- name: restart nginx
+  service: name=nginx state=restarted
