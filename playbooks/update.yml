@@ -1,6 +1,6 @@
 ---
 - name: Update system
-  hosts: allservers
+  hosts: all
   become: True
   tasks:
     - name: update system
