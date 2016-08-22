@@ -1,0 +1,5 @@
+---
+users:
+  matthew:
+    password: $6$gZ0.hW.cFyE$HzbbxkJu77xS652z.tPQXDI3PvEzcdzDFLOGiZb86JccNBWzZDon2eif9J.9seE/fbks.ZYZ8epj1QAQ6S7GB1
+    groups: "sudo"
