@@ -1,0 +1,31 @@
+---
+- name: Delete /var/www directory
+  file: >
+    path=/var/www
+    state=absent
+- name: Deploy app
+  git:
+    repo=https://github.com/matthewbdaly/demoapi.git
+    dest=/var/www
+    version=HEAD
+- name: Set up .env file
+  copy: src=env dest=/var/www/.env owner=root group=root mode=0644
+- name: Run Composer
+  command: "{{ item }} chdir=/var/www"
+  with_items:
+  - composer install
+  - php artisan migrate
+  - php artisan db:seed
+  - php artisan cache:clear
+  - composer dump-autoload
+
+- name: change folder owner
+  file:
+    dest: /var/www
+    state: directory
+    owner: www-data
+    group: www-data
+    recurse: yes
+
+- name: Restart Nginx
+  service: name=nginx state=restarted

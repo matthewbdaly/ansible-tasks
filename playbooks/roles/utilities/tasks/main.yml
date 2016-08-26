@@ -1,6 +1,7 @@
 ---
-- name: Install Utilities
+- name: Update system
   apt: upgrade=full update_cache=yes
+- name: Install Utilities
   apt: name={{ item }} state=present
   with_items:
   - sudo
