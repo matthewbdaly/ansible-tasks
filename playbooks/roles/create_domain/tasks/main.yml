@@ -1,6 +1,6 @@
 ---
 - name: Create domain name
-  digital_ocean_domain:
-    state: present
-    name: "{{ new_droplet.droplet.name }}"
-    ip: "{{ new_droplet.droplet.ip_address }}"
+  digital_ocean_domain: >
+      state=present
+      name="{{ new_droplet.droplet.name }}"
+      ip="{{ new_droplet.droplet.ip_address }}"
