@@ -8,3 +8,8 @@
   hosts: launched
   roles:
     - utilities
+    - users
+    - nginx-php
+    - nginx_firewall
+    - redis
+    - postgres
