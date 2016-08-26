@@ -1,6 +1,10 @@
 ---
 - name: Set up a standard Laravel install
   hosts: localhost
+  vars_prompt:
+    - name: "domain"
+      prompt: "Domain name"
+      private: no
   roles:
     - create_droplet
     - create_domain
