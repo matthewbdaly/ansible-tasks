@@ -1,0 +1,32 @@
+---
+- name: Setup Apache2.4, MySQL and Wordpress
+  hosts: localhost
+  vars_prompt:
+    - name: "host"
+      prompt: "Wordpress host"
+      private: no
+    - name: "title"
+      prompt: "Wordpress title"
+      private: no
+    - name: "email"
+      prompt: "Wordress email"
+      private: no
+    - name: "user"
+      prompt: "Admin username"
+      private: no
+    - name: "pass"
+      prompt: "Admin password"
+      private: no
+- name: Set up droplet
+  roles:
+    - create_droplet
+    - create_domain
+- name: Install dependencies
+  hosts: launched
+  roles:
+    - upgrade
+    - utilities
+    - apache
+    - memcached
+    - mysql
+    - wordpress
