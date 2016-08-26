@@ -1,6 +1,7 @@
 ---
 - name: Create droplet
-  digital_ocean: >
+  local_action:
+    module: digital_ocean
       state=present
       command=droplet
       name={{ domain }}
