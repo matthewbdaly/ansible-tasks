@@ -20,6 +20,7 @@
 - name: Install dependencies
   hosts: launched
   roles:
+    - upgrade
     - utilities
     - users
     - nginx-php
