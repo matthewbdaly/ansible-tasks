@@ -12,17 +12,17 @@
 - name: ensure database is created
   become: True
   become_user: postgres
-  postgresql_db: name={{dbname}}
+  postgresql_db: name={{ dbname }}
 
 - name: ensure user has access to database
   become: True
   become_user: postgres
-  postgresql_user: db={{dbname}} name={{dbuser}} password={{dbpassword}} priv=ALL
+  postgresql_user: db={{ dbname }} name={{ dbuser }} password={{ dbpassword }} priv=ALL
 
 - name: ensure user does not have unnecessary privilege
   become: True
   become_user: postgres
-  postgresql_user: name={{dbuser}} role_attr_flags=NOSUPERUSER,NOCREATEDB
+  postgresql_user: name={{ dbuser }} role_attr_flags=NOSUPERUSER,NOCREATEDB
 
 - name: Reload Systemctl
   command: systemctl daemon-reload
