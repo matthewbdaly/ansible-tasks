@@ -4,3 +4,7 @@
   roles:
     - create_droplet
     - create_domain
+- name: Install dependencies
+  hosts: launched
+  roles:
+    - utilities

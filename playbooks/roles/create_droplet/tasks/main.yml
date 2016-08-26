@@ -11,3 +11,7 @@
       ssh_key_ids={{ [2957623] }}
       unique_name=yes
   register: new_droplet
+- name: Add new droplet to host group
+  local_action: add_host hostname={{ new_droplet.droplet.ip_address }} groupname=launched ansible_ssh_user=root
+- name: Wait for SSH to come up
+  local_action: wait_for host={{ new_droplet.droplet.ip_address }} port=22 delay=60 timeout=320 state=started
