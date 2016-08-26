@@ -5,6 +5,15 @@
     - name: "domain"
       prompt: "Domain name"
       private: no
+    - name: "dbname"
+      prompt: "Database name"
+      private: no
+    - name: "dbuser"
+      prompt: "Database username"
+      private: no
+    - name: "dbpassword"
+      prompt: "Database password"
+      private: no
   roles:
     - create_droplet
     - create_domain

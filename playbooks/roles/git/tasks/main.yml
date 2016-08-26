@@ -9,7 +9,7 @@
     dest=/var/www
     version=HEAD
 - name: Set up .env file
-  copy: src=env dest=/var/www/.env owner=root group=root mode=0644
+  template: src=env dest=/var/www/.env owner=root group=root mode=0644
 - name: Run Composer
   command: "{{ item }} chdir=/var/www"
   with_items:
