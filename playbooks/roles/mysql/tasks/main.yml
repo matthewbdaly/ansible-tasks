@@ -1,0 +1,10 @@
+---
+- name: install mysql
+  apt: name={{ item }} state=present
+  with_items:
+  - mysql-server
+  - php5-mysql
+  - php5-sqlite
+  - python-mysqldb
+
+- service: name=mysql state=restarted

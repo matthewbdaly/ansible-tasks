@@ -1,0 +1,114 @@
+---
+- name: generate randon db name
+  shell: cat /dev/urandom | tr -cd 'a-zA-Z' | head -c 15
+  register: dbname
+
+- name: create database
+  mysql_db: name={{ dbname.stdout }} state=present
+
+- name: generate username
+  shell: cat /dev/urandom | tr -cd 'a-zA-Z' | head -c 15
+  register: username
+- name: generate password
+  shell: cat /dev/urandom | tr -cd 'a-zA-Z' | head -c 15
+  register: password
+
+- name: create user and give permissions to the wordpress database
+  mysql_user: name={{ username.stdout }} password={{ password.stdout }} priv={{ dbname.stdout }}.*:ALL state=present
+
+- name: download wp-cli
+  get_url: url=https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar dest=/usr/local/bin/wp
+
+- name: Allow executing of wp-cli
+  file: path=/usr/local/bin/wp mode="0755"
+
+- name: Add group "wordpress"
+  group: name=wordpress state=present
+
+- name: Add user "wordpress", belonging to group "wordpress" and having a home dir of /var/www
+  user: name=wordpress group=wordpress home=/var/www/ shell=/bin/bash state=present groups=sudo append=yes password={{ wordpress_pass }}
+
+- name: Give ownership of /var/www/ to the wordpress user
+  file: name=/var/www/ group=wordpress owner=wordpress
+
+- name: Fetch random salts for WordPress config
+  local_action: command curl https://api.wordpress.org/secret-key/1.1/salt/
+  register: "wp_salt"
+  become: False
+
+- name: Download wordpress
+  become_user: wordpress
+  command: wp core download --path=/var/www
+
+- name: Setup wordpress config
+  become_user: wordpress
+  command: wp core config --dbname={{ dbname.stdout }} --dbuser={{ username.stdout }} --dbpass={{ password.stdout }} --path=/var/www
+
+- name: Install wordpress
+  become_user: wordpress
+  command: wp core install --url={{ host }} --title={{ title }} --admin_user={{ user }} --admin_password={{ pass }} --admin_email={{ email }} chdir=/var/www
+
+- name: Install wordpress plugins
+  become_user: wordpress
+  command: wp plugin --path=/var/www install {{ item }}
+  with_items:
+    - w3-total-cache
+    - advanced-eu-cookie-law-compliance-fully-customizable-responsive
+    - better-search-replace
+    - cloudflare
+    - cloudflare-flexible-ssl
+    - contact-form-7
+    - disable-comments
+    - duplicate-post
+    - 301-redirects
+    - simple-custom-css
+    - wp-minify-fix
+    - better-wp-security
+    - wordpress
+    - contact-form-7-to-database-extension
+
+- name: Activate wordpress plugins
+  become_user: wordpress
+  command: wp plugin --path=/var/www activate {{ item }}
+  with_items:
+    - w3-total-cache
+    - advanced-eu-cookie-law-compliance-fully-customizable-responsive
+    - better-search-replace
+    - cloudflare
+    - cloudflare-flexible-ssl
+    - contact-form-7
+    - disable-comments
+    - duplicate-post
+    - 301-redirects
+    - simple-custom-css
+    - wp-minify-fix
+    - better-wp-security
+    - wordpress
+    - contact-form-7-to-database-extension
+
+- name: copy configuation files to server
+  template: src={{ item.src }}.j2 dest={{ item.dest }} owner=root group=root mode=0644
+  with_items:
+    - { src: '000-default.conf', dest: '/etc/apache2/sites-available/000-default.conf', owner: 'root', group: 'root' }
+    - { src: 'wp-config.php',  dest: '/var/www/wp-config.php', owner: 'wordpress', group: 'wordpress' }
+    - { src: 'htaccess',  dest: '/var/www/.htaccess', owner: 'wordpress', group: 'wordpress' }
+
+- name: Restart Apache
+  service: name=apache2 state=restarted
+
+- name: create plugin folders
+  become_user: wordpress
+  file: path={{ item }} state=directory
+  with_items:
+    - "/var/www/wp-content/cache"
+    - "/var/www/wp-content/w3tc-config"
+
+- name: Plugin folder permissions
+  become_user: wordpress
+  command: "{{ item }}"
+  with_items:
+    - chmod 777 /var/www/wp-content/cache
+    - chmod 777 /var/www/wp-content/w3tc-config
+    - rm -rf /var/www/wp-content/cache/config
+    - rm -rf /var/www/wp-content/cache/tmp
+    - chmod -R j777 /var/www/wp-content/plugins/wp-minify-fix/cache
