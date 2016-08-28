@@ -13,7 +13,7 @@
       private: no
     - name: "dbpassword"
       prompt: "Database password"
-      private: no
+      private: yes
   roles:
     - create_droplet
     - create_domain
