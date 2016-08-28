@@ -21,7 +21,7 @@
 
 - name: change folder owner
   file:
-    dest: /var/www
+    path: /var/www
     state: directory
     owner: www-data
     group: www-data
