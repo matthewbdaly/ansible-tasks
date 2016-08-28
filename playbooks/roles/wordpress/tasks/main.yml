@@ -26,7 +26,7 @@
   group: name=wordpress state=present
 
 - name: Add user "wordpress", belonging to group "wordpress" and having a home dir of /var/www
-  user: name=wordpress group=wordpress home=/var/www/ shell=/bin/bash state=present groups=sudo append=yes password={{ wordpress_pass }}
+  user: name=wordpress group=wordpress home=/var/www/ shell=/bin/bash state=present groups=sudo append=yes password={{ pass }}
 
 - name: Give ownership of /var/www/ to the wordpress user
   file: name=/var/www/ group=wordpress owner=wordpress
@@ -45,6 +45,9 @@
   become: True
   become_user: wordpress
   command: wp core config --dbname={{ dbname.stdout }} --dbuser={{ username.stdout }} --dbpass={{ password.stdout }} --path=/var/www
+
+- name: Debug domain
+  debug: var=domain
 
 - name: Install wordpress
   become: True
@@ -113,7 +116,7 @@
   become: True
   become_user: wordpress
   file: path=/var/www/wp-content/cache mode=0777
-  file: path=/var/www/wp-content/w3tc-config mode=0777
-  file: path=/var/www/wp-content/cache/config state=absent
-  file: path=/var/www/wp-content/cache/tmp state=absent
-  file: path=/var/www/wp-content/plugins/wp-minify-fix/cache mode=0777 state=directory recurse=yes
+- file: path=/var/www/wp-content/w3tc-config mode=0777
+- file: path=/var/www/wp-content/cache/config state=absent
+- file: path=/var/www/wp-content/cache/tmp state=absent
+- file: path=/var/www/wp-content/plugins/wp-minify-fix/cache mode=0777 state=directory recurse=yes
