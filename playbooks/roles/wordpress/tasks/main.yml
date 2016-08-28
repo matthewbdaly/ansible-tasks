@@ -112,10 +112,8 @@
 - name: Plugin folder permissions
   become: True
   become_user: wordpress
-  command: "{{ item }}"
-  with_items:
-    - chmod 777 /var/www/wp-content/cache
-    - chmod 777 /var/www/wp-content/w3tc-config
-    - rm -rf /var/www/wp-content/cache/config
-    - rm -rf /var/www/wp-content/cache/tmp
-    - chmod -R j777 /var/www/wp-content/plugins/wp-minify-fix/cache
+  file: path=/var/www/wp-content/cache mode=0777
+  file: path=/var/www/wp-content/w3tc-config mode=0777
+  file: path=/var/www/wp-content/cache/config state=absent
+  file: path=/var/www/wp-content/cache/tmp state=absent
+  file: path=/var/www/wp-content/plugins/wp-minify-fix/cache mode=0777 state=directory recurse=yes
