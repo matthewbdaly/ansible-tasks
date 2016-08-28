@@ -29,7 +29,7 @@
   copy: src=default dest=/etc/apache2/sites-available/000-default.conf owner=root group=root mode=0644
 
 - name: change apache webroot permissions
-  command: {{ item }}
+  command: "{{ item }}"
   with_items:
     - sudo groupadd www-data
     - chown -R www-data:www-data /var/www/
