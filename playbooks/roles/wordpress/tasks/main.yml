@@ -1,5 +1,5 @@
 ---
-- name: generate randon db name
+- name: generate random db name
   shell: cat /dev/urandom | tr -cd 'a-zA-Z' | head -c 15
   register: dbname
 
@@ -37,18 +37,22 @@
   become: False
 
 - name: Download wordpress
+  become: True
   become_user: wordpress
   command: wp core download --path=/var/www
 
 - name: Setup wordpress config
+  become: True
   become_user: wordpress
   command: wp core config --dbname={{ dbname.stdout }} --dbuser={{ username.stdout }} --dbpass={{ password.stdout }} --path=/var/www
 
 - name: Install wordpress
+  become: True
   become_user: wordpress
   command: wp core install --url={{ domain }} --title={{ title }} --admin_user={{ user }} --admin_password={{ pass }} --admin_email={{ email }} chdir=/var/www
 
 - name: Install wordpress plugins
+  become: True
   become_user: wordpress
   command: wp plugin --path=/var/www install {{ item }}
   with_items:
@@ -68,6 +72,7 @@
     - contact-form-7-to-database-extension
 
 - name: Activate wordpress plugins
+  become: True
   become_user: wordpress
   command: wp plugin --path=/var/www activate {{ item }}
   with_items:
@@ -86,7 +91,7 @@
     - wordpress
     - contact-form-7-to-database-extension
 
-- name: copy configuation files to server
+- name: copy configuration files to server
   template: src={{ item.src }}.j2 dest={{ item.dest }} owner=root group=root mode=0644
   with_items:
     - { src: '000-default.conf', dest: '/etc/apache2/sites-available/000-default.conf', owner: 'root', group: 'root' }
@@ -97,6 +102,7 @@
   service: name=apache2 state=restarted
 
 - name: create plugin folders
+  become: True
   become_user: wordpress
   file: path={{ item }} state=directory
   with_items:
@@ -104,6 +110,7 @@
     - "/var/www/wp-content/w3tc-config"
 
 - name: Plugin folder permissions
+  become: True
   become_user: wordpress
   command: "{{ item }}"
   with_items:
