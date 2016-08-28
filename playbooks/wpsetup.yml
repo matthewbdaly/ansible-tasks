@@ -25,6 +25,7 @@
   roles:
     - upgrade
     - utilities
+    - users
     - apache
     - varnish
     - memcached
