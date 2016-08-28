@@ -16,7 +16,7 @@
       private: no
     - name: "pass"
       prompt: "Admin password"
-      private: no
+      private: yes
   roles:
     - create_droplet
     - create_domain
