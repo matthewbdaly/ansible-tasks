@@ -25,13 +25,16 @@
     - rewrite
 - name: a2ensite 000-default
   command: a2ensite 000-default
+
 - name: Copy over Apache configuration
   copy: src=default dest=/etc/apache2/sites-available/000-default.conf owner=root group=root mode=0644
+
+- name: Ensure group www-data exists
+  group: name=www-data state=present
 
 - name: change apache webroot permissions
   command: "{{ item }}"
   with_items:
-    - sudo groupadd www-data
     - chown -R www-data:www-data /var/www/
     - chmod -R g+w /var/www
 
