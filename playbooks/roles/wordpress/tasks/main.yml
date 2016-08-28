@@ -46,7 +46,7 @@
 
 - name: Install wordpress
   become_user: wordpress
-  command: wp core install --url={{ host }} --title={{ title }} --admin_user={{ user }} --admin_password={{ pass }} --admin_email={{ email }} chdir=/var/www
+  command: wp core install --url={{ domain }} --title={{ title }} --admin_user={{ user }} --admin_password={{ pass }} --admin_email={{ email }} chdir=/var/www
 
 - name: Install wordpress plugins
   become_user: wordpress

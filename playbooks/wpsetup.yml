@@ -2,8 +2,8 @@
 - name: Setup Apache2.4, MySQL and Wordpress
   hosts: localhost
   vars_prompt:
-    - name: "host"
-      prompt: "Wordpress host"
+    - name: "domain"
+      prompt: "Wordpress domain name"
       private: no
     - name: "title"
       prompt: "Wordpress title"
@@ -17,7 +17,6 @@
     - name: "pass"
       prompt: "Admin password"
       private: no
-- name: Set up droplet
   roles:
     - create_droplet
     - create_domain
