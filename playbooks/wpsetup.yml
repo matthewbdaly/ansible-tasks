@@ -1,5 +1,5 @@
 ---
-- name: Setup Apache2.4, MySQL and Wordpress
+- name: Set up Wordpress with Apache, Memcached and Varnish
   hosts: localhost
   vars_prompt:
     - name: "domain"
