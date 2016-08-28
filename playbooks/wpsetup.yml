@@ -27,6 +27,7 @@
     - upgrade
     - utilities
     - apache
+    - varnish
     - memcached
     - mysql
     - wordpress

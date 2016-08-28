@@ -1,0 +1,22 @@
+---
+- name: install Varnish
+  apt: name={{ item }} state=present
+  with_items:
+  - varnish
+
+- name: Copy over Varnish configuration
+  copy: src=default.vcl dest=/etc/varnish/default.vcl owner=root group=root mode=0644
+- name: Copy over Varnish default
+  copy: src=varnish dest=/etc/default/varnish owner=root group=root mode=0644
+- name: Copy over Varnish systemd configuration
+  copy: src=varnish.service dest=/etc/systemd/system/varnish.service owner=root group=root mode=0644
+- name: Copy over Apache configuration
+  copy: src=default dest=/etc/apache2/sites-available/000-default.conf owner=root group=root mode=0644
+- name: Copy over ports configuration
+  copy: src=ports.conf dest=/etc/apache2/ports.conf owner=root group=root mode=0644
+- name: Reload Systemctl
+  command: systemctl daemon-reload
+- name: Restart Apache
+  service: name=apache2 state=restarted
+- name: Restart Varnish
+  service: name=varnish state=restarted
