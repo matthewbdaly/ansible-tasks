@@ -8,3 +8,4 @@
   - python-mysqldb
 
 - service: name=mysql state=restarted
+- service: name=apache2 state=restarted
