@@ -3,11 +3,11 @@
 
 	DocumentRoot /var/www
 	<Directory />
-		Options FollowSymLinks -Indexes
+		Options +FollowSymLinks
 		AllowOverride All
 	</Directory>
 	<Directory /var/www/>
-		Options FollowSymLinks MultiViews -Indexes
+		Options +FollowSymLinks +MultiViews -Indexes
 		AllowOverride All
 		Order allow,deny
 		allow from all
@@ -16,7 +16,7 @@
 	ScriptAlias /cgi-bin/ /usr/lib/cgi-bin/
 	<Directory "/usr/lib/cgi-bin">
 		AllowOverride None
-		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch -Indexes
+		Options +ExecCGI -MultiViews +SymLinksIfOwnerMatch
 		Order allow,deny
 		Allow from all
 	</Directory>
