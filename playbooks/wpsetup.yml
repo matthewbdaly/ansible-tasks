@@ -3,23 +3,33 @@
   hosts: localhost
   vars_prompt:
     - name: "domain"
-      prompt: "Wordpress domain name"
+      prompt: "Domain name"
       private: no
     - name: "title"
       prompt: "Wordpress title"
       private: no
     - name: "email"
-      prompt: "Wordress email"
+      prompt: "Wordpress email"
       private: no
     - name: "user"
       prompt: "Admin username"
       private: no
-    - name: "pass"
+    - name: "password"
       prompt: "Admin password"
       private: yes
   roles:
     - create_droplet
     - create_domain
+  post_tasks:
+  - set_fact:
+      domain: '{{ domain }}'
+      title: '{{ title }}'
+      wp_email: '{{ email }}'
+      wp_user: '{{ user }}'
+      wp_password: '{{ password }}'
+    delegate_to: '{{ item }}'
+    delegate_facts: true
+    with_inventory_hostnames: launched
 - name: Install dependencies
   hosts: launched
   roles:

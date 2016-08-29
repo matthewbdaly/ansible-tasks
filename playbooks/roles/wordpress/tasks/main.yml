@@ -26,7 +26,7 @@
   group: name=wordpress state=present
 
 - name: Add user "wordpress", belonging to group "wordpress" and having a home dir of /var/www
-  user: name=wordpress group=wordpress home=/var/www/ shell=/bin/bash state=present groups=sudo append=yes password={{ pass }}
+  user: name=wordpress group=wordpress home=/var/www/ shell=/bin/bash state=present groups=sudo append=yes password={{ wp_password }}
 
 - name: Give ownership of /var/www/ to the wordpress user
   file: name=/var/www/ group=wordpress owner=wordpress
@@ -52,7 +52,7 @@
 - name: Install wordpress
   become: True
   become_user: wordpress
-  command: wp core install --url={{ domain }} --title={{ title }} --admin_user={{ user }} --admin_password={{ pass }} --admin_email={{ email }} chdir=/var/www
+  command: wp core install --url={{ domain }} --title={{ title }} --admin_user={{ wp_user }} --admin_password={{ wp_password }} --admin_email={{ wp_email }} chdir=/var/www
 
 - name: Install wordpress plugins
   become: True
