@@ -46,9 +46,6 @@
   become_user: wordpress
   command: wp core config --dbname={{ dbname.stdout }} --dbuser={{ username.stdout }} --dbpass={{ password.stdout }} --path=/var/www
 
-- name: Debug domain
-  debug: var=domain
-
 - name: Install wordpress
   become: True
   become_user: wordpress
