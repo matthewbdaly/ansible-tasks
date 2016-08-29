@@ -5,11 +5,12 @@
     state=absent
 - name: Deploy app
   git:
-    repo=https://github.com/matthewbdaly/demoapi.git
+    repo=git@github.com:matthewbdaly/demoapi.git
     dest=/var/www
     version=HEAD
+    accept_hostkey=yes
 - name: Set up .env file
-  template: src=env dest=/var/www/.env owner=root group=root mode=0644
+  template: src=env.j2 dest=/var/www/.env owner=root group=root mode=0644
 - name: Run Composer
   command: "{{ item }} chdir=/var/www"
   with_items:
