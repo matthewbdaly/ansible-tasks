@@ -24,7 +24,7 @@
     - headers
     - rewrite
     - rpaf
-- name: a2ensite 000-default
+- name: Enable site
   command: a2ensite 000-default
 
 - name: Copy over Apache configuration
