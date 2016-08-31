@@ -1,0 +1,39 @@
+---
+- name: Set up a standard Django app
+  hosts: localhost
+  vars_prompt:
+    - name: "domain"
+      prompt: "Domain name"
+      private: no
+    - name: "dbname"
+      prompt: "Database name"
+      private: no
+    - name: "dbuser"
+      prompt: "Database username"
+      private: no
+    - name: "dbpassword"
+      prompt: "Database password"
+      private: yes
+  roles:
+    - create_droplet
+    - create_domain
+  post_tasks:
+  - set_fact:
+      domain: '{{ domain }}'
+      dbname: '{{ dbname }}'
+      dbuser: '{{ dbuser }}'
+      dbpassword: '{{ dbpassword }}'
+    delegate_to: '{{ item }}'
+    delegate_facts: true
+    with_inventory_hostnames: launched
+- name: Install dependencies
+  hosts: launched
+  roles:
+    - upgrade
+    - utilities
+    - users
+    - nginx-django
+    - nginx_firewall
+    - redis
+    - postgres
+    - git
