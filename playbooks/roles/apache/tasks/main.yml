@@ -23,6 +23,7 @@
     - expires
     - headers
     - rewrite
+    - rpaf
 - name: a2ensite 000-default
   command: a2ensite 000-default
 
