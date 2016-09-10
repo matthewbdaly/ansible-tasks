@@ -10,3 +10,13 @@
    - python3-pyvenv
    - python3-pip
    - supervisor
+   - nginx
+
+- name: Copy over Nginx configuration
+  copy: src=nginx.conf dest=/etc/nginx/sites-available/default owner=root group=root mode=0644
+
+- name: Reload Systemctl
+  command: systemctl daemon-reload
+
+- name: restart nginx
+  service: name=nginx state=restarted
