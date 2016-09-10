@@ -35,6 +35,7 @@
   roles:
     - upgrade
     - utilities
+    - firewall
     - users
     - apache
     - varnish

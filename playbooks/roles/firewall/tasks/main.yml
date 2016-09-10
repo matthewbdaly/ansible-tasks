@@ -1,0 +1,35 @@
+---
+- name: install firewall
+  apt: name={{ item }} state=present
+  with_items:
+  - fail2ban
+  - ufw
+
+- name: Copy over fail2ban configuration
+  template: src=jail.local.j2 dest=/etc/fail2ban/jail.local owner=root group=root mode=0644
+- name: Copy over ufw-ssh configuration
+  template: src=ufw-ssh.conf.j2 dest=/etc/fail2ban/action.d/ufw-ssh.conf owner=root group=root mode=0644
+- name: Copy over ufw-apache configuration
+  template: src=ufw-apache.conf.j2 dest=/etc/fail2ban/action.d/ufw-apache.conf owner=root group=root mode=0644
+- name: Copy over apache-login configuration
+  template: src=apache-login.conf.j2 dest=/etc/fail2ban/filter.d/apache-login.conf owner=root group=root mode=0644
+- name: Copy over postflood.j2 configuration
+  template: src=apache-postflood.conf.j2 dest=/etc/fail2ban/filter.d/apache-postflood.conf owner=root group=root mode=0644
+- name: Copy over XML-RPC configuration
+  template: src=apache-xmlrpc.conf.j2 dest=/etc/fail2ban/filter.d/apache-xmlrpc.conf owner=root group=root mode=0644
+
+- name: Reload Systemctl
+  command: systemctl daemon-reload
+- name: Restart Fail2ban
+  service: name=fail2ban state=restarted
+
+- name: Set logging for ufw
+  ufw: logging=on
+- name: Set default policy
+  ufw: policy=deny
+- name: Allow port 22
+  ufw: rule=allow name=OpenSSH
+- name: Allow port 80
+  ufw: rule=allow port=80 proto=tcp
+- name: Enable ufw
+  ufw: state=enabled

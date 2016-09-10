@@ -1,0 +1,20 @@
+# Fail2Ban configuration file
+#
+#
+# $Revision: 1 $
+#
+
+[Definition]
+# Option: failregex
+# Notes.: Regexp to catch known spambots and software alike. Please verify
+# that it is your intent to block IPs which were driven by
+# abovementioned bots.
+# Values: TEXT
+#
+failregex = <HOST> - (\S+) .* "POST (\S+) HTTP/.*" (401|500)
+
+# Option: ignoreregex
+# Notes.: regex to ignore. If this regex matches, the line is ignored.
+# Values: TEXT
+#
+ignoreregex =
