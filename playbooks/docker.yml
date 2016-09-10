@@ -1,0 +1,23 @@
+---
+- name: Set up a Docker host
+  hosts: localhost
+  vars_prompt:
+    - name: "domain"
+      prompt: "Domain name"
+      private: no
+  roles:
+    - create_droplet
+    - create_domain
+  post_tasks:
+  - set_fact:
+      domain: '{{ domain }}'
+    delegate_to: '{{ item }}'
+    delegate_facts: true
+    with_inventory_hostnames: launched
+- name: Install dependencies
+  hosts: launched
+  roles:
+    - upgrade
+    - utilities
+    - users
+    - docker

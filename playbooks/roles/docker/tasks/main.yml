@@ -1,0 +1,39 @@
+---
+- name: Make sure old versions of Docker are not installed
+  apt: name={{ item }} state=absent
+  with_items:
+    - lxc-docker
+    - docker.io
+
+- name: Install dependencies
+  apt: name={{ item }} state=present
+  with_items:
+    - apt-transport
+    - https
+    - ca-certificates
+
+- name: Add apt key
+  command: apt-key adv --keyserver hkp://p80.pool.sks-keyservers.net:80 --recv-keys 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Copy over APT config
+  copy: src=docker.list dest=/etc/apt/sources.list.d/docker.list
+
+- name: Update package index
+  apt: upgrade=full update_cache=yes
+
+- name: Install Docker
+  apt: name={{ item }} state=absent
+  with_items:
+    - docker-engine
+
+- name: Enable Docker on start
+  command: systemctl enable docker
+
+- name: Start Docker
+  command: systemctl start docker
+
+- name: Ensure Docker group exists
+  group: name=docker state=present
+
+- name: Add user to Docker group
+  user: name=matthew group=docker state=present
