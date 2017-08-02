@@ -36,5 +36,6 @@
     - composer
     - nginx_firewall
     - redis
+    - beanstalk
     - postgres
     - git

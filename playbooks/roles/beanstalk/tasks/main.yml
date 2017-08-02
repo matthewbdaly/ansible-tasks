@@ -1,0 +1,6 @@
+---
+- name: Update system
+  apt: upgrade=full update_cache=yes
+
+- name: Install Beanstalkd
+  apt: name=beanstalkd state=present
