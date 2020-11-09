@@ -17,6 +17,8 @@
   template: src=apache-postflood.conf.j2 dest=/etc/fail2ban/filter.d/apache-postflood.conf owner=root group=root mode=0644
 - name: Copy over XML-RPC configuration
   template: src=apache-xmlrpc.conf.j2 dest=/etc/fail2ban/filter.d/apache-xmlrpc.conf owner=root group=root mode=0644
+- name: Copy over attacks configuration
+  template: src=apache-attacks.conf.j2 dest=/etc/fail2ban/filter.d/apache-attacks.conf owner=root group=root mode=0644
 
 - name: Reload Systemctl
   command: systemctl daemon-reload

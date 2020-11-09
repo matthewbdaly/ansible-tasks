@@ -150,6 +150,15 @@ filter   = apache-auth
 logpath  = /var/log/apache*/*error.log
 maxretry = 6
 
+[apache-attacks]
+
+enabled  = true
+port     = http,https
+filter   = apache-attacks
+logpath  = /var/log/apache*/*error.log
+maxretry = 3
+
+
 [apache-noscript]
 
 enabled = true
